@@ -31,8 +31,16 @@ This is where the model gets built. It pulls the YouTube trending dataset from K
 
 ### FinalIdeaGenerator
 
-This is the main one you will actually use day to day. You put in your video concept, LLaMA 3.3 70B generates ten title candidates via Groq, the saved embedder encodes them into vectors, and the trained XGBoost model scores each one. It also runs a second prompt where the LLM ranks its own outputs as a CTR expert, so you end up with a three column view showing the raw output, the model ranking and the LLM self ranking side by side.
+This is the main one you will actually use day to day. You put in your video concept, LLaMA 3.3 70B generates ten title candidates via Groq, the saved embedder encodes them into vectors, and the trained XGBoost model scores each one. It also runs a second prompt where the LLM ranks its own outputs as a CTR expert, so you end up with a three column view showing the raw output, the model ranking and the LLM self
+ranking side by side.
 
 ### GroundTruthTester
 
 This is for validation. It uses the YouTube Data API v3 to search for videos with similar titles and pulls average view counts from the top results as a rough real world check. Just be aware the free tier only gives you 10,000 quota units per day and each search costs 100 of those, so the automated 50 prompt loop will burn through it fast. Run it in smaller batches if you want to make the quota last.
+
+![FinalResult](images/GroundTruthRanking.png)
+
+## Results
+![FinalResult](images/Test1.png)
+![FinalResult](images/Test2.png)
+![FinalResult](images/Test3.png)
