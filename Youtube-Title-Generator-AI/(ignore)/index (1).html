@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Title-G1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --cream:   #f2ede4;
+  --ink:     #1a1714;
+  --mid:     #6b6158;
+  --faint:   #ddd8cf;
+  --rule:    #c8c2b8;
+  --red:     #c0392b;
+  --warm:    #e8e2d9;
+  --green:   #2d6a4f;
+  --amber:   #b5541a;
+  --mono:    'IBM Plex Mono', monospace;
+}
+
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+  padding:0 1.5rem 5rem;
+}
+
+/* ── header ── */
+header{
+  max-width:900px;
+  margin:0 auto;
+  padding:2rem 0 1.5rem;
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  border-bottom:2px solid var(--ink);
+}
+.wordmark{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+.wordmark sup{
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--mid);
+  vertical-align:super;
+  margin-left:4px;
+}
+.tagline{
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--mid);
+  font-weight:400;
+}
+
+/* ── layout ── */
+.container{
+  max-width:900px;
+  margin:0 auto;
+}
+
+/* ── hero text ── */
+.hero{
+  padding:3rem 0 2.5rem;
+  border-bottom:1px solid var(--rule);
+  margin-bottom:2.5rem;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,4rem);
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-2px;
+  margin-bottom:1rem;
+  max-width:600px;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--red);
+}
+.hero p{
+  color:var(--mid);
+  font-size:0.95rem;
+  font-weight:300;
+  max-width:480px;
+  line-height:1.7;
+}
+
+/* ── input section ── */
+.input-section{margin-bottom:2rem;}
+.field-label{
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--mid);
+  display:block;
+  margin-bottom:0.5rem;
+}
+textarea{
+  width:100%;
+  background:var(--warm);
+  border:1px solid var(--rule);
+  border-top:2px solid var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:1rem;
+  font-weight:300;
+  color:var(--ink);
+  padding:1rem;
+  resize:none;
+  outline:none;
+  transition:border-color .15s;
+  line-height:1.6;
+}
+textarea::placeholder{color:var(--rule);}
+textarea:focus{border-top-color:var(--red);}
+
+.btn-row{
+  display:flex;
+  gap:0.75rem;
+  margin-top:0.75rem;
+  flex-wrap:wrap;
+}
+.btn{
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:0.7rem 1.4rem;
+  border:1.5px solid var(--ink);
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+  transition:background .15s, color .15s;
+}
+.btn:hover{background:var(--ink);color:var(--cream);}
+.btn:disabled{opacity:.35;cursor:not-allowed;}
+.btn-primary{background:var(--ink);color:var(--cream);}
+.btn-primary:hover{background:#333;}
+.btn-ghost{border-color:var(--rule);color:var(--mid);}
+.btn-ghost:hover{background:var(--warm);color:var(--ink);}
+
+/* ── tabs ── */
+.tabs{
+  display:flex;
+  gap:0;
+  border-bottom:2px solid var(--ink);
+  margin-bottom:2rem;
+}
+.tab{
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:0.6rem 1.2rem;
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  color:var(--mid);
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;
+  transition:color .15s;
+}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink);}
+.tab:hover:not(.active){color:var(--ink);}
+
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── loader ── */
+.loader{
+  display:none;
+  padding:3rem 0;
+  text-align:center;
+}
+.loader.visible{display:block;}
+.loader-bar{
+  width:200px;
+  height:2px;
+  background:var(--faint);
+  margin:0 auto 1rem;
+  position:relative;
+  overflow:hidden;
+}
+.loader-bar::after{
+  content:'';
+  position:absolute;
+  left:-40%;
+  top:0;
+  width:40%;
+  height:100%;
+  background:var(--red);
+  animation:slide 1s ease-in-out infinite;
+}
+@keyframes slide{
+  0%{left:-40%}
+  100%{left:100%}
+}
+.loader p{
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--mid);
+}
+
+/* ── results panel ── */
+.results-wrap{display:none;}
+.results-wrap.visible{display:block;}
+
+/* insight */
+.insight{
+  border-left:3px solid var(--red);
+  padding:1rem 1.2rem;
+  background:var(--warm);
+  margin-bottom:2rem;
+  font-size:0.9rem;
+  font-weight:300;
+  line-height:1.7;
+  color:var(--ink);
+}
+.insight strong{
+  display:block;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--mid);
+  margin-bottom:0.4rem;
+  font-weight:500;
+}
+
+/* leaderboard */
+.leaderboard-header{
+  display:grid;
+  grid-template-columns:36px 1fr 80px 60px 80px;
+  gap:0.5rem;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--mid);
+  padding:0 0 0.5rem;
+  border-bottom:1px solid var(--rule);
+  margin-bottom:0.25rem;
+  font-weight:500;
+}
+.rank-row{
+  display:grid;
+  grid-template-columns:36px 1fr 80px 60px 80px;
+  gap:0.5rem;
+  align-items:center;
+  padding:0.9rem 0;
+  border-bottom:1px solid var(--faint);
+  animation:fadeIn .3s ease both;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.rank-num{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--mid);
+  text-align:right;
+  padding-right:0.5rem;
+}
+.rank-row:first-of-type .rank-num{color:var(--ink);font-weight:500;}
+
+.rank-title{
+  font-size:0.9rem;
+  font-weight:400;
+  line-height:1.4;
+}
+.rank-row:first-of-type .rank-title{font-weight:500;}
+
+.score-cell{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--mid);
+  text-align:right;
+}
+.rank-row:first-of-type .score-cell{color:var(--red);}
+
+.bar-cell{padding:0 0.25rem;}
+.bar-track{
+  height:3px;
+  background:var(--faint);
+  width:100%;
+}
+.bar-fill{
+  height:100%;
+  background:var(--rule);
+  transition:width .5s ease;
+}
+.rank-row:first-of-type .bar-fill{background:var(--red);}
+
+.action-cell{display:flex;gap:6px;justify-content:flex-end;}
+.icon-btn{
+  font-size:11px;
+  padding:3px 7px;
+  border:1px solid var(--rule);
+  background:transparent;
+  color:var(--mid);
+  cursor:pointer;
+  font-family:'IBM Plex Sans',sans-serif;
+  transition:all .15s;
+}
+.icon-btn:hover{border-color:var(--ink);color:var(--ink);}
+.icon-btn.copied{border-color:var(--green);color:var(--green);}
+
+/* ── ground truth panel ── */
+.gt-panel{
+  margin-top:0.5rem;
+  margin-left:36px;
+  padding:1rem;
+  background:var(--warm);
+  border-left:2px solid var(--faint);
+  display:none;
+  animation:fadeIn .2s ease;
+}
+.gt-panel.open{display:block;}
+.gt-loading{
+  font-size:11px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--mid);
+}
+.gt-item{
+  padding:0.6rem 0;
+  border-bottom:1px solid var(--faint);
+  font-size:0.85rem;
+}
+.gt-item:last-child{border:none;}
+.gt-vt{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--mid);
+  margin-top:2px;
+}
+.gt-vt .viral{color:var(--green);font-weight:500;}
+.gt-vt .moderate{color:var(--amber);}
+.gt-vt .low{color:var(--mid);}
+.gt-link{
+  font-size:10px;
+  color:var(--red);
+  text-decoration:none;
+  letter-spacing:0.5px;
+}
+.gt-link:hover{text-decoration:underline;}
+.gt-none{font-size:11px;color:var(--mid);font-style:italic;}
+
+/* ── compare panel ── */
+.compare-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  margin-top:1rem;
+}
+.compare-col{background:var(--cream);padding:0;}
+.compare-col-head{
+  padding:0.8rem 1rem;
+  border-bottom:2px solid var(--ink);
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--mid);
+}
+.compare-col:nth-child(2) .compare-col-head{
+  background:var(--ink);
+  color:var(--cream);
+  border-bottom-color:var(--red);
+}
+.compare-col:nth-child(2) .compare-col-head span{color:var(--rule);}
+.compare-col-head span{
+  display:block;
+  color:var(--faint);
+  font-size:8px;
+  letter-spacing:1px;
+  margin-top:2px;
+  text-transform:none;
+}
+.compare-item{
+  padding:0.75rem 1rem;
+  font-size:0.82rem;
+  line-height:1.4;
+  border-bottom:1px solid var(--faint);
+  display:flex;
+  gap:0.5rem;
+  align-items:baseline;
+}
+.compare-col:nth-child(2) .compare-item{background:var(--warm);}
+.compare-rank{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--rule);
+  flex-shrink:0;
+  min-width:18px;
+}
+.compare-col:nth-child(2) .compare-rank{color:var(--mid);}
+.compare-score{
+  font-family:var(--mono);
+  font-size:9px;
+  color:var(--red);
+  flex-shrink:0;
+}
+.compare-move{
+  font-size:9px;
+  padding:1px 5px;
+  background:var(--warm);
+  color:var(--green);
+  border:1px solid var(--faint);
+  flex-shrink:0;
+}
+
+/* ── error ── */
+.error{
+  display:none;
+  border:1px solid #e74c3c;
+  border-left:3px solid #e74c3c;
+  padding:0.75rem 1rem;
+  font-size:0.85rem;
+  color:#c0392b;
+  margin-top:0.75rem;
+  background:#fdf2f0;
+}
+.error.visible{display:block;}
+
+/* ── footer ── */
+footer{
+  max-width:900px;
+  margin:4rem auto 0;
+  padding-top:1.5rem;
+  border-top:1px solid var(--rule);
+  display:flex;
+  justify-content:space-between;
+  font-size:10px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--mid);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">Title-G1</div>
+</header>
+
+<div class="container">
+
+  <div class="hero">
+    <h1>Draft and Improve your Youtube Titles!</h1>
+    <p>Paste your video concept or a draft title. The system produces 10 titles and scores them trained on 100,000+ real videos and lets you verify against actual YouTube results.</p>
+  </div>
+
+  <!-- Input -->
+  <div class="input-section">
+    <label class="field-label" for="idea">Your video concept</label>
+    <textarea id="idea" rows="3" placeholder="e.g. I survived 24 hours in the woods alone but I'm also blind…"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="gen-btn" onclick="doGenerate()">Rank Ideas</button>
+      <button class="btn" id="cmp-btn" onclick="doCompare()">Compare Methods</button>
+      <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+    </div>
+    <div class="error" id="err"></div>
+  </div>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loader-bar"></div>
+    <p id="loader-msg">Brainstorming titles…</p>
+  </div>
+
+  <!-- Tabs (shown after first result) -->
+  <div id="tabs-wrap" style="display:none">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('rank',this)">Ranked Results</button>
+      <button class="tab" onclick="switchTab('compare',this)">Method Comparison</button>
+    </div>
+
+    <!-- Rank panel -->
+    <div class="tab-panel active" id="panel-rank">
+      <div class="results-wrap" id="rank-results">
+        <div class="insight" id="insight">
+          <strong>Strategy insight</strong>
+          <span id="insight-text"></span>
+        </div>
+        <div class="leaderboard-header">
+          <div></div>
+          <div>Title</div>
+          <div style="text-align:right">Score</div>
+          <div>Strength</div>
+          <div style="text-align:right">Actions</div>
+        </div>
+        <div id="leaderboard"></div>
+      </div>
+    </div>
+
+    <!-- Compare panel -->
+    <div class="tab-panel" id="panel-compare">
+      <div id="compare-results"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <span>Title-G1 — XGBoost + LLaMA 3.3 70B</span>
+  <span>Trained on 100k+ videos · US · GB · CA</span>
+</footer>
+
+<script>
+const API = "http://localhost:5000";
+let lastIdea = "";
+
+// ── util ──────────────────────────────────────────────────────────────────
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fmt(n){
+  if(n>=1000000) return (n/1000000).toFixed(1)+"M";
+  if(n>=1000)    return (n/1000).toFixed(0)+"K";
+  return n.toLocaleString();
+}
+function viralClass(v){ return v>=1000000?"viral":v>=100000?"moderate":"low"; }
+
+function showLoader(msg="Working…"){
+  document.getElementById("loader").classList.add("visible");
+  document.getElementById("loader-msg").textContent = msg;
+}
+function hideLoader(){ document.getElementById("loader").classList.remove("visible"); }
+
+function showErr(msg){
+  const e = document.getElementById("err");
+  e.textContent = msg;
+  e.classList.add("visible");
+}
+function clearErr(){ document.getElementById("err").classList.remove("visible"); }
+
+function setBtns(disabled){
+  ["gen-btn","cmp-btn"].forEach(id=>{
+    document.getElementById(id).disabled = disabled;
+  });
+}
+
+function clearAll(){
+  document.getElementById("idea").value = "";
+  document.getElementById("tabs-wrap").style.display = "none";
+  clearErr();
+  lastIdea = "";
+}
+
+function switchTab(name, btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("panel-"+name).classList.add("active");
+}
+
+// ── copy ─────────────────────────────────────────────────────────────────
+async function copyTitle(text, btn){
+  await navigator.clipboard.writeText(text);
+  btn.textContent = "copied";
+  btn.classList.add("copied");
+  setTimeout(()=>{ btn.textContent="copy"; btn.classList.remove("copied"); }, 1500);
+}
+
+// ── ground truth ─────────────────────────────────────────────────────────
+async function toggleGroundTruth(title, btn, panelId){
+  const panel = document.getElementById(panelId);
+  if(panel.classList.contains("open")){
+    panel.classList.remove("open");
+    btn.textContent = "prove it";
+    return;
+  }
+  panel.classList.add("open");
+  btn.textContent = "hide";
+  if(panel.dataset.loaded) return;
+
+  panel.innerHTML = `<div class="gt-loading">Searching YouTube…</div>`;
+  try{
+    const res  = await fetch(`${API}/groundtruth`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({title})});
+    const data = await res.json();
+    if(!data.results || data.results.length===0){
+      panel.innerHTML=`<div class="gt-none">No similar videos found on YouTube.</div>`;
+    } else {
+      panel.innerHTML = data.results.map(v=>`
+        <div class="gt-item">
+          <div>${esc(v.title)}</div>
+          <div class="gt-vt">
+            <span class="${viralClass(v.views)}">${fmt(v.views)} views</span>
+            &nbsp;·&nbsp; ${esc(v.channel)}
+            &nbsp;·&nbsp; <a class="gt-link" href="${v.url}" target="_blank">watch →</a>
+          </div>
+        </div>`).join("");
+    }
+    panel.dataset.loaded = "1";
+  } catch(e){
+    panel.innerHTML=`<div class="gt-none">Error fetching results.</div>`;
+  }
+}
+
+// ── generate ─────────────────────────────────────────────────────────────
+async function doGenerate(){
+  const idea = document.getElementById("idea").value.trim();
+  if(!idea) return;
+  lastIdea = idea;
+  clearErr();
+  setBtns(true);
+  showLoader("Brainstorming with LLaMA 3.3…");
+  document.getElementById("tabs-wrap").style.display = "none";
+
+  try{
+    const res  = await fetch(`${API}/generate`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idea})});
+    if(!res.ok){ const d=await res.json(); throw new Error(d.error||"Server error"); }
+    const data = await res.json();
+    renderLeaderboard(data);
+    document.getElementById("tabs-wrap").style.display = "block";
+    // switch to rank tab
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+    document.querySelector(".tab").classList.add("active");
+    document.getElementById("panel-rank").classList.add("active");
+  } catch(e){
+    showErr("Error: "+e.message+". Is app.py running on port 5000?");
+  } finally {
+    hideLoader();
+    setBtns(false);
+  }
+}
+
+function renderLeaderboard({leaderboard, insight}){
+  document.getElementById("insight-text").textContent = insight;
+  const maxScore = leaderboard[0]?.score || 1;
+  document.getElementById("leaderboard").innerHTML = leaderboard.map((item,i)=>{
+    const pct = Math.round((item.score/maxScore)*100);
+    const pid = "gt-"+i;
+    return `
+      <div class="rank-row" style="animation-delay:${i*40}ms">
+        <div class="rank-num">${String(i+1).padStart(2,"0")}</div>
+        <div class="rank-title">${esc(item.title)}</div>
+        <div class="score-cell">${item.score.toFixed(2)}</div>
+        <div class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>
+        <div class="action-cell">
+          <button class="icon-btn" onclick="copyTitle('${item.title.replace(/'/g,"\\'")}',this)">copy</button>
+          <button class="icon-btn" onclick="toggleGroundTruth('${item.title.replace(/'/g,"\\'")}',this,'${pid}')">prove it</button>
+        </div>
+      </div>
+      <div class="gt-panel" id="${pid}"></div>`;
+  }).join("");
+  document.getElementById("rank-results").classList.add("visible");
+}
+
+// ── compare ──────────────────────────────────────────────────────────────
+async function doCompare(){
+  const idea = document.getElementById("idea").value.trim() || lastIdea;
+  if(!idea){ showErr("Enter a video idea first."); return; }
+  clearErr();
+  setBtns(true);
+  showLoader("Running all three methods…");
+  document.getElementById("tabs-wrap").style.display = "none";
+
+  try{
+    const res  = await fetch(`${API}/compare`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idea})});
+    if(!res.ok){ const d=await res.json(); throw new Error(d.error||"Server error"); }
+    const data = await res.json();
+    renderCompare(data);
+    document.getElementById("tabs-wrap").style.display = "block";
+    // switch to compare tab
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+    document.querySelectorAll(".tab")[1].classList.add("active");
+    document.getElementById("panel-compare").classList.add("active");
+  } catch(e){
+    showErr("Error: "+e.message+". Is app.py running on port 5000?");
+  } finally {
+    hideLoader();
+    setBtns(false);
+  }
+}
+
+function renderCompare({llm_raw, model_ranked, trained_llm}){
+  const maxScore = Math.max(...model_ranked.map(x=>x.score||0)) || 1;
+
+  // build position lookup for llm_raw to find how model moved things
+  const rawPos = {};
+  llm_raw.forEach((x,i)=>{ rawPos[x.title] = i+1; });
+
+  const colHTML = (items, isModel) => items.map((item,i)=>{
+    const score = item.score ? `<span class="compare-score">${item.score.toFixed(2)}</span>` : "";
+    let move = "";
+    if(isModel && rawPos[item.title]){
+      const diff = rawPos[item.title] - (i+1);
+      if(diff>0) move = `<span class="compare-move">↑${diff}</span>`;
+    }
+    return `<div class="compare-item">
+      <span class="compare-rank">${i+1}.</span>
+      <span>${esc(item.title)}</span>
+      ${score}${move}
+    </div>`;
+  }).join("");
+
+  document.getElementById("compare-results").innerHTML = `
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div class="compare-col-head">LLM Raw Order<span>Unranked brainstorm</span></div>
+        ${colHTML(llm_raw, false)}
+      </div>
+      <div class="compare-col">
+        <div class="compare-col-head">Model Ranked<span>Your trained XGBoost</span></div>
+        ${colHTML(model_ranked, true)}
+      </div>
+      <div class="compare-col">
+        <div class="compare-col-head">Trained LLM<span>CTR-aware prompt</span></div>
+        ${colHTML(trained_llm, false)}
+      </div>
+    </div>`;
+}
+
+// ── keyboard shortcut ─────────────────────────────────────────────────────
+document.getElementById("idea").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)) doGenerate();
+});
+</script>
+</body>
+</html>
